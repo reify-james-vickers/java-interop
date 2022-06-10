@@ -35,6 +35,12 @@
   (type #{}) ; clojure.lang.PersistentHashSet
   (type '())) ; clojure.lang.PersistentList
 
+; tagged literals built-in for java.util.UUID and java.util.Date
+(comment 
+  (type #uuid "3b8a31ed-fd89-4f1b-a00f-42e3d60cf5ce")
+  (= #uuid "3b8a31ed-fd89-4f1b-a00f-42e3d60cf5ce" #uuid "3b8a31ed-fd89-4f1b-a00f-42e3d60cf5ce")
+  (type #inst "2018-03-28T10:48:00.000"))
+
 ; check if value implements interface or extends class
 (comment
   (instance? Long 1)
