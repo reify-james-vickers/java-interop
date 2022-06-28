@@ -71,7 +71,23 @@
   (let [arr ^ints (make-array Integer/TYPE 3)]
     {:length (alength arr) :first (aget arr 0)})
   (let [arr ^doubles (make-array Double/TYPE 3)]
-    {:length (alength arr) :first (aget arr 0)}))
+    {:length (alength arr) :first (aget arr 0)})
   
+  ; multi-dimensional array type hints with string class name in :tag
+  ; reflection warning, not hinted
+  (let [arr (make-array Integer/TYPE 1 2 3)] ; array with dimensions 1, 2, 3
+    (alength arr))
+  ; get name of class to use for metadata
+  (.getName (class (make-array Integer/TYPE 1 2 3)))
+  ; no reflection warning, array class name in :tag metadata of var
+  (let [arr ^{:tag "[[[I"} (make-array Integer/TYPE 1 2 3)]
+    (alength arr))
+  ; reflection warning
+  (let [arr (make-array String 1 2)]
+    (alength arr))
+  (.getName (class (make-array String 1 2))) ; get name for array type hint
+  ; no reflection warning
+  (let [arr ^{:tag "[[Ljava.lang.String;"} (make-array String 1 2)]
+    (alength arr)))
 
 (set! *warn-on-reflection* false)
