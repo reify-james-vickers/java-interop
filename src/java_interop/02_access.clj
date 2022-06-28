@@ -19,7 +19,7 @@
   ; calling methods with arguments
   (.equals p nil) ; p.equals(null) - note that nil is java null.
   (.equals p (Point. 1 2)) ; p.equals(new Point(1, 2))
-  (.equals p (Point. 1 3))) ; p.equals(new Point(1, 3))
+  (.equals p (Point. 1 5))) ; p.equals(new Point(1, 3))
 
 (comment
   ; calling static methods

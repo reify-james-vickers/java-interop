@@ -24,6 +24,9 @@
   (type 1.5) ; java.lang.Double
   (type (float 1.5)) ; java.lang.Float
   (type 1.5M) ; java.math.BigDecimal
+  (decimal? 1.5M) ; true
+  (type 5N) ; BigInt
+  (decimal? 5N) ; false
   (type "foo") ; java.lang.String
   (type false) ; java.lang.Boolean
   (type \a) ; java.lang.Character
@@ -63,14 +66,39 @@
   (quot 5 3) ; 5 / 3
   (quot 10 3) ; 10 / 3
 
-  (/ 5 3) ; a ratio 5/3, because args are ints and not divisible
+  ; ratios ----------------------------------------------------------------
+
+  ; If the result of an integer calculation would be a decimal number, then the value is a Ratio
   (def r (/ 5 3))
-  (type r)
-  (numerator r)
-  (denominator r)
-  (.floatValue r)
-  (/ 3 3) ; => 1
-  (/ 5.0 3.0) ; this returns a double
+  (type r) ; clojure.lang.Ratio
+  (ratio? r) ; true
+  (rational? r) ; true 
+  (numerator r) ; 5
+  (denominator r) ; 3
+  (.floatValue r) ; 1.66
+  (float r)       ; 1.66
+  (int r)         ; 1
+  ; other examples that may or may not result in ratio
+  (type (/ 1N 3N)) ; ratio 1/3
+  (type (/ (int 3) (int 2))) ; ratio 3/2 from int's
+  (type (/ 1M 2)) ; BigDecimal 0.5, not a ratio because some inputs are BigDecimal
+  ; some calculations stay ratios
+  (type (+ (/ 1 3) (/ 1 3))) ; ratio 2/3
+  (type (- (/ 2 3) (/ 1 3))) ; ratio 1/3
+  (type (+ 1N 2N (/ 2N 3N))) ; ratio 11/3
+  (type (max (/ 1 3) (/ 2 3))) ; ratio 2/3
+  (type (min (/ 1 3) (/ 2 3))) ; ratio 1/3
+  (type (+ 1.0M 2.0M (/ 2.0M 3.0M))) ; error, no exact decimal result
+  (type (+ 1.0M 2 (/ 2 3))) ; error, no exact decimal result 
+
+  (type (* (/ 1 3) 3)) ; => BigInt 1; ratios can become other types when divisible
+  (type (+ (/ 1 2) (/ 3 2))) ; => BigInt 2
+  (type (/ 3 3)) ; => Long with value 1, *not* a ratio
+
+  ; double value 1.66, not a ratio because some inputs are doubles
+  (type (/ 5.0 3.0))
+  (type (/ 5.0 3))
+  ; ------------------------------------------------------------------------- 
 
   ; there are literals for special values like Nan and Infinity
   (Double/isNaN Double/NaN)
@@ -93,7 +121,3 @@
   (unchecked-dec Long/MIN_VALUE) ; allows overflow
   (unchecked-add 5 Long/MAX_VALUE)
   (unchecked-multiply 2 Long/MAX_VALUE))
-  
-  
-  
-  
