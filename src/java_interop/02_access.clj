@@ -6,8 +6,8 @@
 
 (comment
   ; Creating an object
-  ; could also do: (new Point 1 2), same exact thing.
   (def p (Point. 1 2)) ; new Point(1, 2)
+  (new Point 1 2) ; same thing, new Point(1, 2) 
   ; field access
   (.-x p) ; p.x
   (.-y p) ; p.y

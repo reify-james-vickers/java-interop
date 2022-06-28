@@ -68,7 +68,10 @@
   ; no warning because array is type hinted
   (let [arr ^longs (make-array Long/TYPE 3)]
     {:length (alength arr) :first (aget arr 0)})
+  (let [arr ^ints (make-array Integer/TYPE 3)]
+    {:length (alength arr) :first (aget arr 0)})
   (let [arr ^doubles (make-array Double/TYPE 3)]
     {:length (alength arr) :first (aget arr 0)}))
+  
 
 (set! *warn-on-reflection* false)
